@@ -1,0 +1,173 @@
+// #include <Arduino.h>
+// #include "Control/LoRa.h"
+// #include "Control/SensorRead.h"
+// #include "Control/Display.h"
+
+// int state = 1;
+// int periodSent = 0;
+// bool btnPressed = false;
+
+// String LoRaData;
+// bool statusSentData;
+// bool showLCD = false;
+// bool debugMode = false;
+// unsigned long currentTime;
+// unsigned long timeToPressBTN;
+// unsigned long timeToShowLCD;
+// unsigned long timeToSwitchLCD;
+
+// void btnActiveLcdIsPressed()
+// {
+//   state = 11;
+//   // btnPressed = !btnPressed;
+// }
+
+// void btnActiveLcdIsRelease()
+// {
+//   state = 13;
+//   btnPressed = !btnPressed;
+// }
+
+// void btnChangeModeIsPressed()
+// {
+//   state = 14;
+// }
+
+// void resetESP()
+// {
+//   Serial.println("Restart ESP32");
+//   esp_restart();
+// }
+
+// void setup()
+// {
+//   Serial.begin(115200);
+//   // Serial.println("ESP Active");
+//   initLoRa();
+//   pinMode(BTN_ACTIVE_LCD, INPUT_PULLUP);
+//   pinMode(BTN_CHANGE_MODE, INPUT_PULLUP);
+//   // attachInterrupt(digitalPinToInterrupt(BTN_ACTIVE_LCD), btnActiveLcdIsPressed, FALLING);
+//   attachInterrupt(digitalPinToInterrupt(BTN_ACTIVE_LCD), btnActiveLcdIsPressed, FALLING);
+//   // attachInterrupt(digitalPinToInterrupt(BTN_CHANGE_MODE), btnActiveLcdIsRelease, FALLING);
+//   // esp_sleep_enable_ext0_wakeup(GPIO_NUM_25, LOW);
+//   // esp_sleep_enable_ext0_wakeup(GPIO_NUM_35, LOW);
+//   // esp_sleep_enable_timer_wakeup(5 * 60 * 1000 * 1000);
+// }
+
+// void loop()
+// {
+//   currentTime = millis();
+//   if (state == 1)
+//   { // readSensor
+//     Serial.println("---------Read sensor---------");
+//     LoRaData = readSensorAll();
+//     Serial.print("LoRaData : ");
+//     Serial.println(LoRaData);
+//     if (showLCD == true)
+//     {
+//       timeToSwitchLCD = currentTime;
+//       timeToShowLCD = currentTime;
+//       state = 20;
+//     }
+//     else
+//     {
+//       state++;
+//     }
+//   }
+
+//   if (state == 2) // sent data
+//   {
+//     Serial.println("---------LoRa sent---------");
+//     // sentLoRa(0x00, 0xff, LoRaData);
+//     state++;
+//   }
+
+//   if (state == 3)
+//   { // Receive Data
+//     bool receive = receiveLoRa();
+//     if (receive)
+//     {
+//       Serial.println("---------LoRa sent success---------");
+//       periodSent = 0;
+//       state++;
+//     }
+//     else if (!receive && periodSent <= 5)
+//     {
+//       Serial.println("---------LoRa sent fail resent---------");
+//       periodSent++;
+//       state--;
+//     }
+//     else
+//     {
+//       Serial.println("---------LoRa sent fail---------");
+//       state++;
+//     }
+//   }
+
+//   if (state == 4 && !showLCD)
+//   { // box sleep
+//     Serial.println("---------ESP Sleep---------");
+//     esp_deep_sleep_start();
+//   }
+
+//   if (state == 11) // กดปุ่ม
+//   {
+//     Serial.println(state);
+//     timeToPressBTN = currentTime;
+    
+//     state++;
+//   }
+
+//   if (state == 12) // เช็คเวลากดปุ่ม
+//   {
+//     Serial.println(currentTime-timeToPressBTN);
+//     if (currentTime - timeToPressBTN >= 5000)
+//     {
+//       Serial.println("goto reset");
+//       resetESP();
+//     }
+//     if (digitalRead(BTN_ACTIVE_LCD))
+//     {
+//       Serial.println("goto lcd first page");
+//       // lcdFirstPage();
+//       state = 1;
+//     }
+//   }
+
+//   if (state == 11 && btnPressed) // ปล่อยปุ่ม
+//   {
+//     showLCD = true;
+//     state = 1;
+//     Serial.println(state);
+//   }
+
+//   if (state == 14)
+//   { // กดปุ่ม
+//     debugMode = !debugMode;
+//     if (debugMode)
+//     {
+//       esp_sleep_enable_timer_wakeup(30 * 1000 * 1000);
+//     }
+//     else
+//     {
+//       esp_sleep_enable_timer_wakeup(5 * 60 * 1000 * 1000);
+//     }
+//   }
+
+//   if (showLCD && currentTime - timeToSwitchLCD >= 5000)
+//   {
+//     // lcdFirstPage();
+//   }
+
+//   if (showLCD && currentTime - timeToSwitchLCD >= 10000)
+//   {
+//     // lcdSecondPage();
+//     timeToSwitchLCD = currentTime;
+//   }
+
+//   if (currentTime - timeToShowLCD >= 60000)
+//   {
+//     showLCD = false;
+//   }
+// }
+// 2
