@@ -169,8 +169,8 @@ void setup()
     EEPROM.begin(512);
     Serial.begin(115200);
     // uncomment 172,173 to upload code first time.
-    //  EEPROM.put(ADDR_MODE, 0);
-    //  EEPROM.commit();
+    // EEPROM.put(ADDR_MODE, 0);
+    // EEPROM.commit();
     initLoRa();
     lcd.init();
     dht.begin();
